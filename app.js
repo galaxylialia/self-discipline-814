@@ -199,6 +199,11 @@ const STATE_CONFIGS = {
   allDone:    { img: 'assets/allDone.png',     bubble: '今天全完成了！我们为你骄傲！🏆' },
 };
 
+// 预加载所有状态图片，防止切换时空白
+(function preload() {
+  Object.values(STATE_CONFIGS).forEach(c => { new Image().src = c.img; });
+})();
+
 function setCharState(state, bubbleText) {
   const img     = document.getElementById('charImg');
   const wrapper = document.getElementById('charWrapper');
