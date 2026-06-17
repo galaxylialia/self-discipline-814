@@ -152,14 +152,14 @@ function tick() {
   renderTasks();
   updateNowBanner(now);
 
-  // 1. 全部完成
+  // 1. 庆祝期间不覆盖（优先保护庆祝动画）
+  if (celebrateTimeout !== null) return;
+
+  // 2. 全部完成
   if (tasks.length > 0 && tasks.every(t => t.done)) {
     setCharState('allDone');
     return;
   }
-
-  // 2. 庆祝期间不覆盖
-  if (celebrateTimeout !== null) return;
 
   // 3 & 4. 当前有进行中任务
   const activeTask = tasks.find(t => !t.done && now >= parseTime(t.start) && now < parseTime(t.end));
@@ -214,6 +214,7 @@ function updateNowBanner(now) {
 tick();
 setInterval(() => {
   const h = new Date().getHours();
+  if (celebrateTimeout !== null) return;
   if (h >= 22 || h < 5) { setCharState('sleep'); return; }
-  if (celebrateTimeout === null) tick();
+  tick();
 }, 30000);
