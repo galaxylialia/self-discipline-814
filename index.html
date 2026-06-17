@@ -22,7 +22,13 @@
   <!-- 角色区 -->
   <section class="character-zone">
     <div id="charWrapper" class="char-wrapper state-idle">
-      <img id="charImg" src="assets/idle.png" alt="Lando and Oscar" class="char-img">
+      <img data-state="idle"       src="assets/idle.png"       alt="" class="char-img">
+      <img data-state="focus"      src="assets/focus.png"      alt="" class="char-img char-hidden">
+      <img data-state="urge"       src="assets/urge.png"       alt="" class="char-img char-hidden">
+      <img data-state="celebrate"  src="assets/celebrate.png"  alt="" class="char-img char-hidden">
+      <img data-state="disappoint" src="assets/disappoint.png" alt="" class="char-img char-hidden">
+      <img data-state="allDone"    src="assets/allDone.png"    alt="" class="char-img char-hidden">
+      <img data-state="sleep"      src="assets/sleep.png"      alt="" class="char-img char-hidden">
     </div>
     <div class="state-bubble" id="stateBubble">准备好了，我们盯着你！</div>
   </section>

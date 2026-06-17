@@ -69,9 +69,7 @@ body {
   background: var(--cream);
   width: 200px;
   height: 158px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  position: relative;
 }
 
 .char-img {
@@ -81,7 +79,9 @@ body {
   object-position: top center;
   mix-blend-mode: darken;
   flex-shrink: 0;
+  position: absolute;
 }
+.char-hidden { display: none; }
 
 .state-bubble {
   background: #fff;
