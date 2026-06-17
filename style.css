@@ -58,10 +58,10 @@ body {
 }
 
 .char-img {
-  width: 180px;
-  height: 180px;
+  width: 200px;
+  height: 200px;
   object-fit: contain;
-  mix-blend-mode: multiply; /* 消除白色背景，铅笔线条融入页面 */
+  mix-blend-mode: darken; /* darken 比 multiply 更彻底消除白底：白色(255)被背景色替代 */
 }
 
 .state-bubble {

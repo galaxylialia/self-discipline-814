@@ -65,10 +65,13 @@ function escapeHtml(str) {
 
 function completeTask(id) {
   const task = tasks.find(t => t.id === id);
-  if (!task || task.done) return;
-  task.done = true;
-  triggerCelebrate();
-  tick();
+  if (!task) return;
+  task.done = !task.done;
+  if (task.done) {
+    triggerCelebrate();
+  } else {
+    tick();
+  }
 }
 
 function triggerCelebrate() {
@@ -95,7 +98,34 @@ sheetOverlay.addEventListener('click', (e) => {
 });
 confirmBtn.addEventListener('click', addTask);
 
+startInput.addEventListener('change', () => {
+  const start = parseTime(startInput.value);
+  const end   = parseTime(endInput.value);
+  if (end <= start) {
+    const newEnd = (start + 60) % (24 * 60);
+    const nh = String(Math.floor(newEnd / 60)).padStart(2, '0');
+    const nm = String(newEnd % 60).padStart(2, '0');
+    endInput.value = nh + ':' + nm;
+  }
+});
+
+endInput.addEventListener('change', () => {
+  const start = parseTime(startInput.value);
+  const end   = parseTime(endInput.value);
+  if (start >= end) {
+    const newStart = Math.max(0, end - 60);
+    const nh = String(Math.floor(newStart / 60)).padStart(2, '0');
+    const nm = String(newStart % 60).padStart(2, '0');
+    startInput.value = nh + ':' + nm;
+  }
+});
+
 function openSheet() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, '0');
+  const hNext = String((now.getHours() + 1) % 24).padStart(2, '0');
+  startInput.value = h + ':00';
+  endInput.value = hNext + ':00';
   sheetOverlay.style.display = 'flex';
   setTimeout(() => taskNameInput.focus(), 100);
 }
