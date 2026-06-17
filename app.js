@@ -34,7 +34,8 @@ function renderTasks() {
 
     item.innerHTML = `
       <div class="task-time">
-        <strong>${task.start}</strong>${task.end}
+        <strong>${task.start}</strong>
+        <span>– ${task.end}</span>
       </div>
       <div class="task-name">${escapeHtml(task.name)}</div>
       <button class="task-check" data-id="${task.id}" aria-label="完成">
@@ -102,6 +103,8 @@ function openSheet() {
 function closeSheet() {
   sheetOverlay.style.display = 'none';
   taskNameInput.value = '';
+  startInput.value = '09:00';
+  endInput.value = '10:00';
 }
 
 function addTask() {
