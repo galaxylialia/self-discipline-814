@@ -69,6 +69,7 @@ function completeTask(id) {
   const task = tasks.find(t => t.id === id);
   if (!task) return;
   task.done = !task.done;
+  renderTasks(); // 立即更新列表，不等庆祝 timeout
   if (task.done) {
     triggerCelebrate();
   } else {
