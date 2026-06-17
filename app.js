@@ -32,10 +32,12 @@ function renderTasks() {
       (isActive    ? ' active' : '') +
       (isMissed    ? ' missed' : '');
 
+    const remaining = isActive ? parseTime(task.end) - now : null;
     item.innerHTML = `
       <div class="task-time">
         <strong>${task.start}</strong>
         <span>– ${task.end}</span>
+        ${isActive ? `<span class="task-countdown">还剩 ${remaining} 分钟</span>` : ''}
       </div>
       <div class="task-name">${escapeHtml(task.name)}</div>
       <button class="task-check" data-id="${task.id}" aria-label="完成">
@@ -180,7 +182,6 @@ function setCharState(state, bubbleText) {
 function tick() {
   const now = currentMinutes();
   renderTasks();
-  updateNowBanner(now);
 
   // 1. 庆祝期间不覆盖（优先保护庆祝动画）
   if (celebrateTimeout !== null) return;
@@ -221,23 +222,6 @@ function tick() {
 
   // 7. 没有任务 / 22:00 以后 / 所有任务已过
   setCharState('sleep');
-}
-
-// ---- 当前任务横幅 ----
-function updateNowBanner(now) {
-  const banner   = document.getElementById('nowBanner');
-  const nameEl   = document.getElementById('nowTaskName');
-  const countEl  = document.getElementById('nowCountdown');
-  const activeTask = tasks.find(t => !t.done && now >= parseTime(t.start) && now < parseTime(t.end));
-
-  if (activeTask) {
-    const remaining = parseTime(activeTask.end) - now;
-    nameEl.textContent  = `${activeTask.start} – ${activeTask.end} · ${activeTask.name}`;
-    countEl.textContent = `还剩 ${remaining} 分钟`;
-    banner.style.display = 'flex';
-  } else {
-    banner.style.display = 'none';
-  }
 }
 
 // ---- 定时器启动 ----
