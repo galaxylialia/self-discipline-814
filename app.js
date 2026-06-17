@@ -79,3 +79,46 @@ function triggerCelebrate() {
     tick();
   }, 3000);
 }
+
+// ---- 弹出面板 ----
+const addBtn       = document.getElementById('addBtn');
+const sheetOverlay = document.getElementById('sheetOverlay');
+const confirmBtn   = document.getElementById('confirmBtn');
+const taskNameInput = document.getElementById('taskName');
+const startInput   = document.getElementById('startTime');
+const endInput     = document.getElementById('endTime');
+
+addBtn.addEventListener('click', openSheet);
+sheetOverlay.addEventListener('click', (e) => {
+  if (e.target === sheetOverlay) closeSheet();
+});
+confirmBtn.addEventListener('click', addTask);
+
+function openSheet() {
+  sheetOverlay.style.display = 'flex';
+  setTimeout(() => taskNameInput.focus(), 100);
+}
+
+function closeSheet() {
+  sheetOverlay.style.display = 'none';
+  taskNameInput.value = '';
+}
+
+function addTask() {
+  const name  = taskNameInput.value.trim();
+  const start = startInput.value;
+  const end   = endInput.value;
+
+  if (!name) { taskNameInput.focus(); return; }
+  if (!start || !end) return;
+  if (parseTime(start) >= parseTime(end)) {
+    endInput.focus();
+    return;
+  }
+
+  tasks.push({ id: Date.now(), name, start, end, done: false });
+  tasks.sort((a, b) => parseTime(a.start) - parseTime(b.start));
+
+  closeSheet();
+  tick();
+}
