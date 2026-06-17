@@ -57,12 +57,22 @@ body {
   gap: 12px;
 }
 
+.char-wrapper {
+  background: var(--cream);
+  width: 200px;
+  height: 158px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
 .char-img {
   width: 200px;
-  height: 158px; /* 裁掉底部文字水印，只保留人物主体 */
+  height: 158px;
   object-fit: cover;
   object-position: top center;
   mix-blend-mode: darken;
+  flex-shrink: 0;
 }
 
 .state-bubble {

@@ -200,12 +200,13 @@ const STATE_CONFIGS = {
 };
 
 function setCharState(state, bubbleText) {
-  const img    = document.getElementById('charImg');
-  const bubble = document.getElementById('stateBubble');
-  const config = STATE_CONFIGS[state];
+  const img     = document.getElementById('charImg');
+  const wrapper = document.getElementById('charWrapper');
+  const bubble  = document.getElementById('stateBubble');
+  const config  = STATE_CONFIGS[state];
 
   img.src = config.img;
-  img.className = `char-img state-${state}`;
+  wrapper.className = `char-wrapper state-${state}`;
   bubble.textContent = bubbleText || config.bubble;
 }
 
