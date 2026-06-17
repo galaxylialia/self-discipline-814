@@ -313,3 +313,56 @@ body {
   outline: 2px solid var(--green);
   outline-offset: 2px;
 }
+
+/* ---- 角色状态动画 ---- */
+
+/* 待机：慢速左右轻摇 */
+@keyframes anim-idle {
+  0%, 100% { transform: rotate(-2deg); }
+  50%       { transform: rotate(2deg); }
+}
+.state-idle { animation: anim-idle 4s ease-in-out infinite; }
+
+/* 专注：微微前倾脉冲 */
+@keyframes anim-focus {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50%       { transform: scale(1.03) translateY(-2px); }
+}
+.state-focus { animation: anim-focus 2s ease-in-out infinite; }
+
+/* 催促：快速水平抖动 */
+@keyframes anim-urge {
+  0%, 100% { transform: translateX(0); }
+  25%       { transform: translateX(-4px); }
+  75%       { transform: translateX(4px); }
+}
+.state-urge { animation: anim-urge 0.3s ease-in-out infinite; }
+
+/* 庆祝：上下弹跳 */
+@keyframes anim-celebrate {
+  0%, 100% { transform: translateY(0); }
+  40%       { transform: translateY(-18px); }
+  60%       { transform: translateY(-14px); }
+}
+.state-celebrate { animation: anim-celebrate 0.5s ease-in-out infinite; }
+
+/* 失望：缓慢下沉 */
+@keyframes anim-disappoint {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(5px); }
+}
+.state-disappoint { animation: anim-disappoint 3s ease-in-out infinite; }
+
+/* 全部完成：缩放脉冲 */
+@keyframes anim-allDone {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.06); }
+}
+.state-allDone { animation: anim-allDone 1.5s ease-in-out infinite; }
+
+/* 打盹：极慢呼吸 */
+@keyframes anim-sleep {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(3px); }
+}
+.state-sleep { animation: anim-sleep 4s ease-in-out infinite; }
