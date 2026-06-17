@@ -366,3 +366,13 @@ body {
   50%       { transform: translateY(3px); }
 }
 .state-sleep { animation: anim-sleep 4s ease-in-out infinite; }
+
+/* iOS 触摸优化 */
+input, button { font-size: 16px; } /* 防止 iOS 自动缩放 */
+
+.task-check, .add-btn, .confirm-btn {
+  min-height: 44px; /* Apple HIG 最小点击区域 */
+}
+
+/* 防止双击缩放 */
+* { touch-action: manipulation; }
