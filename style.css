@@ -157,22 +157,28 @@ body {
 }
 
 .task-check {
-  width: 32px; height: 32px;
+  width: 30px; height: 30px;
+  min-height: unset; /* 覆盖 iOS min-height，防止椭圆 */
   border-radius: 50%;
-  border: 2px solid var(--border);
+  border: 2px dashed var(--border);
   background: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 15px;
   flex-shrink: 0;
-  transition: background 0.2s, border-color 0.2s;
+  color: transparent;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  /* 用 padding 扩大 iOS 触摸区域而不影响外观 */
+  padding: 6px;
+  margin: -6px;
+  box-sizing: content-box;
 }
-.task-check:active { transform: scale(0.9); }
+.task-check:active { transform: scale(0.85); }
 .task-item.done .task-check {
-  background: #bbb;
-  border-color: #bbb;
+  background: var(--green);
+  border: 2px solid var(--green);
   color: #fff;
 }
 
@@ -345,7 +351,7 @@ body {
 /* iOS 触摸优化 */
 input, button { font-size: 16px; } /* 防止 iOS 自动缩放 */
 
-.task-check, .add-btn, .confirm-btn {
+.add-btn, .confirm-btn {
   min-height: 44px; /* Apple HIG 最小点击区域 */
 }
 
