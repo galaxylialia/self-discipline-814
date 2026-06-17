@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>今天的计划</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 日期头部 -->
+  <header class="date-header">
+    <p class="date-sub" id="dateDisplay"></p>
+    <h1>今天的计划 ✦</h1>
+  </header>
+
+  <hr class="divider">
+
+  <!-- 角色区 -->
+  <section class="character-zone">
+    <img id="charImg" src="assets/idle.png" alt="Lando and Oscar" class="char-img state-idle">
+    <div class="state-bubble" id="stateBubble">准备好了，我们盯着你！</div>
+  </section>
+
+  <!-- 当前任务横幅 -->
+  <div class="now-banner" id="nowBanner" style="display:none">
+    <div class="now-dot"></div>
+    <div class="now-text">
+      <strong id="nowTaskName"></strong>
+      <span id="nowCountdown"></span>
+    </div>
+  </div>
+
+  <!-- 任务列表 -->
+  <main class="task-list" id="taskList"></main>
+
+  <!-- 添加按钮 -->
+  <button class="add-btn" id="addBtn">＋ 添加时间块</button>
+
+  <!-- 底部弹出面板 -->
+  <div class="sheet-overlay" id="sheetOverlay" style="display:none">
+    <div class="sheet" id="sheet">
+      <div class="sheet-handle"></div>
+      <h2 class="sheet-title">＋ 新时间块</h2>
+      <label class="field-label">任务名称</label>
+      <input class="field-input" id="taskName" type="text" placeholder="比如：看书、vibe coding…" autocomplete="off">
+      <label class="field-label">时间段</label>
+      <div class="time-row">
+        <input class="field-input" id="startTime" type="time" value="09:00">
+        <span class="time-sep">→</span>
+        <input class="field-input" id="endTime" type="time" value="10:00">
+      </div>
+      <button class="confirm-btn" id="confirmBtn">确认添加</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
