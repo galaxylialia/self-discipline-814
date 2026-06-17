@@ -46,6 +46,8 @@ function renderTasks() {
     `;
 
     item.querySelector('.task-check').addEventListener('click', () => completeTask(task.id));
+    item.querySelector('.task-name').addEventListener('click', () => openSheet(task.id));
+    item.querySelector('.task-time').addEventListener('click', () => openSheet(task.id));
     list.appendChild(item);
   });
 }
@@ -88,18 +90,21 @@ function triggerCelebrate() {
 }
 
 // ---- 弹出面板 ----
-const addBtn       = document.getElementById('addBtn');
-const sheetOverlay = document.getElementById('sheetOverlay');
-const confirmBtn   = document.getElementById('confirmBtn');
+const addBtn        = document.getElementById('addBtn');
+const sheetOverlay  = document.getElementById('sheetOverlay');
+const confirmBtn    = document.getElementById('confirmBtn');
+const sheetTitle    = document.getElementById('sheetTitle');
 const taskNameInput = document.getElementById('taskName');
-const startInput   = document.getElementById('startTime');
-const endInput     = document.getElementById('endTime');
+const startInput    = document.getElementById('startTime');
+const endInput      = document.getElementById('endTime');
 
-addBtn.addEventListener('click', openSheet);
+let editingId = null; // null = 新增模式，数字 = 编辑模式
+
+addBtn.addEventListener('click', () => openSheet(null));
 sheetOverlay.addEventListener('click', (e) => {
   if (e.target === sheetOverlay) closeSheet();
 });
-confirmBtn.addEventListener('click', addTask);
+confirmBtn.addEventListener('click', saveTask);
 
 startInput.addEventListener('change', () => {
   const start = parseTime(startInput.value);
@@ -123,24 +128,38 @@ endInput.addEventListener('change', () => {
   }
 });
 
-function openSheet() {
-  const now = new Date();
-  const h = String(now.getHours()).padStart(2, '0');
-  const hNext = String((now.getHours() + 1) % 24).padStart(2, '0');
-  startInput.value = h + ':00';
-  endInput.value = hNext + ':00';
+function openSheet(taskId) {
+  editingId = taskId;
+  if (taskId !== null) {
+    const task = tasks.find(t => t.id === taskId);
+    sheetTitle.textContent = '✏️ 编辑时间块';
+    confirmBtn.textContent = '确认修改';
+    taskNameInput.value = task.name;
+    startInput.value = task.start;
+    endInput.value = task.end;
+  } else {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const hNext = String((now.getHours() + 1) % 24).padStart(2, '0');
+    sheetTitle.textContent = '＋ 新时间块';
+    confirmBtn.textContent = '确认添加';
+    taskNameInput.value = '';
+    startInput.value = h + ':00';
+    endInput.value = hNext + ':00';
+  }
   sheetOverlay.style.display = 'flex';
   setTimeout(() => taskNameInput.focus(), 100);
 }
 
 function closeSheet() {
   sheetOverlay.style.display = 'none';
+  editingId = null;
   taskNameInput.value = '';
   startInput.value = '09:00';
   endInput.value = '10:00';
 }
 
-function addTask() {
+function saveTask() {
   const name  = taskNameInput.value.trim();
   const start = startInput.value;
   const end   = endInput.value;
@@ -152,8 +171,18 @@ function addTask() {
     return;
   }
 
-  tasks.push({ id: Date.now(), name, start, end, done: false });
-  tasks.sort((a, b) => parseTime(a.start) - parseTime(b.start));
+  if (editingId !== null) {
+    const task = tasks.find(t => t.id === editingId);
+    if (task) {
+      task.name  = name;
+      task.start = start;
+      task.end   = end;
+      tasks.sort((a, b) => parseTime(a.start) - parseTime(b.start));
+    }
+  } else {
+    tasks.push({ id: Date.now(), name, start, end, done: false });
+    tasks.sort((a, b) => parseTime(a.start) - parseTime(b.start));
+  }
 
   closeSheet();
   tick();

@@ -59,9 +59,10 @@ body {
 
 .char-img {
   width: 200px;
-  height: 200px;
-  object-fit: contain;
-  mix-blend-mode: darken; /* darken 比 multiply 更彻底消除白底：白色(255)被背景色替代 */
+  height: 158px; /* 裁掉底部文字水印，只保留人物主体 */
+  object-fit: cover;
+  object-position: top center;
+  mix-blend-mode: darken;
 }
 
 .state-bubble {
@@ -150,6 +151,10 @@ body {
 .task-name {
   flex: 1;
   font-size: 18px;
+  cursor: pointer;
+}
+.task-time {
+  cursor: pointer;
 }
 .task-item.done .task-name {
   text-decoration: line-through;
