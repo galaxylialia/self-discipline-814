@@ -125,3 +125,95 @@ function addTask() {
   closeSheet();
   tick();
 }
+
+// ---- 状态系统 ----
+const STATE_CONFIGS = {
+  sleep:      { img: 'assets/sleep.png',      bubble: '还没有计划呢，先打个盹～' },
+  idle:       { img: 'assets/idle.png',        bubble: '' },
+  focus:      { img: 'assets/focus.png',       bubble: '' },
+  urge:       { img: 'assets/urge.png',        bubble: '' },
+  disappoint: { img: 'assets/disappoint.png',  bubble: '' },
+  celebrate:  { img: 'assets/celebrate.png',   bubble: '太棒了！！继续加油！✨' },
+  allDone:    { img: 'assets/allDone.png',     bubble: '今天全完成了！我们为你骄傲！🏆' },
+};
+
+function setCharState(state, bubbleText) {
+  const img    = document.getElementById('charImg');
+  const bubble = document.getElementById('stateBubble');
+  const config = STATE_CONFIGS[state];
+
+  img.src = config.img;
+  img.className = `char-img state-${state}`;
+  bubble.textContent = bubbleText || config.bubble;
+}
+
+function tick() {
+  const now = currentMinutes();
+  renderTasks();
+  updateNowBanner(now);
+
+  // 1. 全部完成
+  if (tasks.length > 0 && tasks.every(t => t.done)) {
+    setCharState('allDone');
+    return;
+  }
+
+  // 2. 庆祝期间不覆盖
+  if (celebrateTimeout !== null) return;
+
+  // 3 & 4. 当前有进行中任务
+  const activeTask = tasks.find(t => !t.done && now >= parseTime(t.start) && now < parseTime(t.end));
+  if (activeTask) {
+    const remaining = parseTime(activeTask.end) - now;
+    if (remaining <= 5) {
+      setCharState('urge', `还有 ${remaining} 分钟！快快快，收个尾！`);
+    } else {
+      setCharState('focus', `你在「${activeTask.name}」，我们盯着你呢！`);
+    }
+    return;
+  }
+
+  // 5. 最近一条已超时未完成
+  const missedTask = tasks
+    .filter(t => !t.done && now >= parseTime(t.end))
+    .sort((a, b) => parseTime(b.end) - parseTime(a.end))[0];
+  if (missedTask) {
+    setCharState('disappoint', `诶…「${missedTask.name}」没完成，下次加油！`);
+    return;
+  }
+
+  // 6. 任务间隙 / 第一个任务前
+  const nextTask = tasks.find(t => !t.done && parseTime(t.start) > now);
+  if (nextTask) {
+    setCharState('idle', `下一个任务 ${nextTask.start} 开始，休息一下～`);
+    return;
+  }
+
+  // 7. 没有任务 / 22:00 以后 / 所有任务已过
+  setCharState('sleep');
+}
+
+// ---- 当前任务横幅 ----
+function updateNowBanner(now) {
+  const banner   = document.getElementById('nowBanner');
+  const nameEl   = document.getElementById('nowTaskName');
+  const countEl  = document.getElementById('nowCountdown');
+  const activeTask = tasks.find(t => !t.done && now >= parseTime(t.start) && now < parseTime(t.end));
+
+  if (activeTask) {
+    const remaining = parseTime(activeTask.end) - now;
+    nameEl.textContent  = `${activeTask.start} – ${activeTask.end} · ${activeTask.name}`;
+    countEl.textContent = `还剩 ${remaining} 分钟`;
+    banner.style.display = 'flex';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+// ---- 定时器启动 ----
+tick();
+setInterval(() => {
+  const h = new Date().getHours();
+  if (h >= 22 || h < 5) { setCharState('sleep'); return; }
+  if (celebrateTimeout === null) tick();
+}, 30000);
